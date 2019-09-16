@@ -7,3 +7,8 @@ exports.test = function (req , res) {
         message : "OK"
     });
 };
+
+exports.Registration = function(req , res) {
+
+    res.send(req.body);
+};

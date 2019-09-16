@@ -4,6 +4,7 @@ var serveStatic = require('serve-static');
 var path = require('path');
 var morgan = require('morgan');
 var healthChecker = require('sc-framework-health-check');
+var bodyparser = require('body-parser');
 
 
 var UsersController = require('./Controllers/UsersController');
@@ -26,16 +27,9 @@ class Worker extends SCWorker {
 
 
     app.use(serveStatic(path.resolve(__dirname, 'public')));
-    app.get("/test" , function (req , res){
+    app.use(bodyparser.json());
 
-      res.send({
-        message: "hi"
-      });
-    });
-
-    app.get("/hello" , function (req , res) {
-      UsersController.test(req , res);
-    });
+    app.put("/users" , function(req, res){UsersController.Registration(req, res)});
 
 
 
