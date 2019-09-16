@@ -6,7 +6,7 @@ var morgan = require('morgan');
 var healthChecker = require('sc-framework-health-check');
 var bodyparser = require('body-parser');
 
-
+var mongoose = require('mongoose');
 var UsersController = require('./Controllers/UsersController');
 class Worker extends SCWorker {
   run() {
@@ -24,6 +24,12 @@ class Worker extends SCWorker {
       app.use(morgan('dev'));
     }
 
+    mongoose.connect("mongodb://localhost/Snapp" , {useNewUrlParser : true});
+    var db = mongoose.connection;
+
+    if(!db)
+      console.log("Database Connection error");
+    else console.log("Database is Available");
 
 
     app.use(serveStatic(path.resolve(__dirname, 'public')));
