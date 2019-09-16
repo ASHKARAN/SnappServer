@@ -5,6 +5,7 @@ var UsersSchema = mongoose.Schema({
 
     PhoneNumber : {
         type: String ,
+        unique : true ,
         required: true
     },
     Fname : String ,
@@ -15,6 +16,11 @@ var UsersSchema = mongoose.Schema({
     RegistrationDate : {
         type: Date,
         default : Date.now()
+    },
+    ActivationCode : Number ,
+    Activated      : {
+        type: Boolean ,
+        default:  false
     }
 
 });
