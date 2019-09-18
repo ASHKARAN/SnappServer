@@ -9,6 +9,7 @@ var jwt = require('jsonwebtoken');
 
 var mongoose = require('mongoose');
 var UsersController = require('./Controllers/UsersController');
+var AddressController = require('./Controllers/AddressController');
 class Worker extends SCWorker {
   run() {
     console.log('   >> Worker PID:', process.pid);
@@ -38,9 +39,22 @@ class Worker extends SCWorker {
 
     app.put("/users" ,  (req, res) => {UsersController.Registration(req, res)});
     app.post("/users/activation" ,  (req, res) => {UsersController.Activation(req, res)});
+    app.put("/addresses" , VerifyToken,   (req, res) => {AddressController.AddNewAddress(req , res)});
+    app.get("/addresses" , VerifyToken,   (req, res) => {AddressController.GetAddresses(req , res)});
 
 
 
+    function VerifyToken(req , res , next) {
+
+      jwt.verify(req.get("Authorization"), '123456', function(err, decoded) {
+        if(err) {
+          res.status(500).send({error : true  ,code : "wrong_token" , message : "Wrong token"} )
+        }
+        else {
+           next();
+        }
+      });
+    }
 
     // Listen for HTTP GET "/health-check".
     healthChecker.attach(this, app);
