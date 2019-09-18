@@ -1,14 +1,11 @@
 var AddressSchema = require('../Schemas/AddressSchema');
 var jwt = require('jsonwebtoken');
-var AuthorizationToken = require("../Utils/AuthorizationToken");
-exports.AddNewAddress = async function (req , res) {
+
+exports.AddNewAddress =  function (req , res) {
 
 
 
-    var User = await AuthorizationToken.Decrypt(req.get("Authorization"));
-    res .send(User);
 
-    /*
     AddressSchema.findOne({PhoneNumber : req.body.PhoneNumber} , function (err , data) {
         if(err) {
             res.status(500).send({error : true , code : "system_error" , message : "some error happens"});
@@ -27,7 +24,7 @@ exports.AddNewAddress = async function (req , res) {
         else {
             res.status(500).send({error : true  ,code : "user_already_exists" , message : "user already exists"} )
         }
-    });*/
+    });
 };
 
 exports.GetAddresses = function (req , res) {
