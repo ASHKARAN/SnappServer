@@ -1,15 +1,16 @@
 var mongoose = require('mongoose');
-var ForeingKeyHelper = require("../Utils/ForeignKeyHelper");
-
+var ForeignKeyHelper = require("../Utils/ForeignKeyHelper");
+var Schema = mongoose.Schema;
 var AddressSchema = mongoose.Schema({
 
 
     UserID : {
         type: Schema.ObjectId ,
+        ref : "users",
         validate : {
             isAsync : true ,
             validator : function(v) {
-                ForeingKeyHelper(mongoose.model("users" , v))
+                ForeignKeyHelper(mongoose.model("users" , v))
             }
         },
         required: true
