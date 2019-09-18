@@ -41,6 +41,7 @@ class Worker extends SCWorker {
     app.post("/users/activation" ,  (req, res) => {UsersController.Activation(req, res)});
     app.put("/addresses" , VerifyToken,   (req, res) => {AddressController.AddNewAddress(req , res)});
     app.get("/addresses" , VerifyToken,   (req, res) => {AddressController.GetAddresses(req , res)});
+    app.delete("/addresses" , VerifyToken,   (req, res) => {AddressController.DeleteAddress(req , res)});
 
 
 

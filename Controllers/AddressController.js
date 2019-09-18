@@ -24,16 +24,25 @@ exports.AddNewAddress =  async function (req , res) {
 exports.GetAddresses = async function (req , res) {
 
     var User = await AuthorizationToken.Decrypt(req.get("Authorization"));
-
-
-
-
     AddressSchema.find({UserID : User._id } , function (err , data) {
         if(err) {
             res.status(500).send({error : true , code : "system_error" , message : "some error happens"});
             return;
         }
         res.send(data);
+    });
+};
+exports.DeleteAddress = async function (req , res) {
+
+    var User = await AuthorizationToken.Decrypt(req.get("Authorization"));
+
+    AddressSchema.findOneAndDelete({_id : req.body.AddressID } , function (err , data) {
+        if(err) {
+            res.status(500).send({error : true , code : "system_error" , message : "some error happens"});
+            return;
+        }
+        res.send({error : false , code : "success" , message : "Address removed"});
+
     });
 };
 
