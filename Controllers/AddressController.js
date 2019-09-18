@@ -1,30 +1,14 @@
 var AddressSchema = require('../Schemas/AddressSchema');
 var jwt = require('jsonwebtoken');
-
-exports.AddNewAddress =  function (req , res) {
-
-
+var AuthorizationToken = require("../Utils/AuthorizationToken")
+exports.AddNewAddress =  async function (req , res) {
 
 
-    AddressSchema.findOne({PhoneNumber : req.body.PhoneNumber} , function (err , data) {
-        if(err) {
-            res.status(500).send({error : true , code : "system_error" , message : "some error happens"});
-            return;
-        }
-        if(data == null) {
-            var activationCode = Math.floor(Math.random() * 10000);
-            var user = new UsersSchema({PhoneNumber:  req.body.PhoneNumber , ActivationCode : activationCode});
-            user.save().then(() =>  res.send({error : false  ,code : "activation" , message : "Activation code sent"} ));
-        }
-        else if(!data.Activated) {
-            var activationCode = Math.floor(Math.random() * 10000);
-            data.ActivationCode = activationCode ;
-            data.save().then(() =>  res.send({error : false  ,code : "activation" , message : "Activation code sent"} ));
-        }
-        else {
-            res.status(500).send({error : true  ,code : "user_already_exists" , message : "user already exists"} )
-        }
-    });
+    var User = AuthorizationToken.Decrypt(req.get("Authorization"));
+
+    res.send(User);
+
+
 };
 
 exports.GetAddresses = function (req , res) {

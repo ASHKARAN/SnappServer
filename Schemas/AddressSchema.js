@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
-
+var Schema = mongoose.Schema;
 
 var AddressSchema = mongoose.Schema({
 
 
     UserID : {
-        type: Object ,
+        type: Schema.ObjectId ,
         required: true
     },
     Address  : String ,
