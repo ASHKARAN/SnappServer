@@ -35,7 +35,7 @@ class Worker extends SCWorker {
     app.use(serveStatic(path.resolve(__dirname, 'public')));
     app.use(bodyparser.json());
 
-    app.put("/users" , function(req, res){UsersController.Registration(req, res)});
+    app.put("/users" ,  (req, res) => {UsersController.Registration(req, res)});
 
 
 
