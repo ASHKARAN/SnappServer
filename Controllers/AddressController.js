@@ -1,12 +1,22 @@
 var AddressSchema = require('../Schemas/AddressSchema');
 var jwt = require('jsonwebtoken');
-var AuthorizationToken = require("../Utils/AuthorizationToken")
+var AuthorizationToken = require("../Utils/AuthorizationToken");
+
+
+
 exports.AddNewAddress =  async function (req , res) {
 
 
-    var User = AuthorizationToken.Decrypt(req.get("Authorization"));
+    var User = await AuthorizationToken.Decrypt(req.get("Authorization"));
 
-    res.send(User);
+    req.body.UserID = User._id ;
+    var Address = new AddressSchema(req.body);
+    Address.save().then(() => {
+        res.send({error : false , code : "success" , message : "Address Saved"});
+    }, function (err) {
+        res.status(500).send({error : true , code : "failed" , message : "Address not saved"});
+    });
+
 
 
 };
