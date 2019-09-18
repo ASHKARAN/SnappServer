@@ -5,6 +5,7 @@ var path = require('path');
 var morgan = require('morgan');
 var healthChecker = require('sc-framework-health-check');
 var bodyparser = require('body-parser');
+var jwt = require('jsonwebtoken');
 
 var mongoose = require('mongoose');
 var UsersController = require('./Controllers/UsersController');
@@ -36,6 +37,7 @@ class Worker extends SCWorker {
     app.use(bodyparser.json());
 
     app.put("/users" ,  (req, res) => {UsersController.Registration(req, res)});
+    app.post("/users/activation" ,  (req, res) => {UsersController.Activation(req, res)});
 
 
 

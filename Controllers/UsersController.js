@@ -1,11 +1,11 @@
 var UsersSchema = require('../Schemas/UsersSchema');
-
+var jwt = require('jsonwebtoken');
 
 exports.Registration = function (req , res) {
 
     UsersSchema.findOne({PhoneNumber : req.body.PhoneNumber} , function (err , data) {
         if(err) {
-            res.send({error : true , code : "system_error" , message : "some error happens"});
+            res.status(500).send({error : true , code : "system_error" , message : "some error happens"});
             return;
         }
         if(data == null) {
@@ -19,7 +19,41 @@ exports.Registration = function (req , res) {
             data.save().then(() =>  res.send({error : false  ,code : "activation" , message : "Activation code sent"} ));
         }
         else {
-            res.send({error : true  ,code : "user_already_exists" , message : "user already exists"} )
+            res.status(500).send({error : true  ,code : "user_already_exists" , message : "user already exists"} )
+        }
+    });
+};
+
+exports.Activation = function (req , res) {
+
+    if(req.body.ActivationCode === 0) {
+        res.status(500).send({error : true , code : "wrong_activation_code" , message : "Wrong Activation Code"});
+        return;
+    }
+
+    UsersSchema.findOne({PhoneNumber : req.body.PhoneNumber } , function (err , data) {
+        if(err) {
+            res.status(500).send({error : true , code : "system_error" , message : "some error happens"});
+            return;
+        }
+        if(data == null) {
+            res.status(500).send({error : true , code : "user_not_found" , message : "User Not Found"});
+        }
+        else if(data.Activated) {
+            res.status(500).send({error : true , code : "user_already_activated" , message : "User Already Activated"});
+        }
+        else if(data.ActivationCode === req.body.ActivationCode) {
+            data.ActivationCode = 0 ;
+            data.Activated = true ;
+
+            var token = jwt.sign({data : data}, '123456');
+
+            data.save().then(() => res.send({error : false , code : "success_activation" ,
+                    message : "Activation Successfull" , Token : token } ) );
+        }
+        else {
+            res.status(500).send({error : true , code : "wrong_activation_code" , message : "Wrong Activation Code"});
+
         }
     });
 };
